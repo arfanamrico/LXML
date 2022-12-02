@@ -1,0 +1,13 @@
+from lxml import etree
+filenya = "3G.xml"
+root = etree.parse(filenya).getroot()
+list_class = []
+print(list_class)
+manangeobj = root.findall('managedObject')
+for mo in manangeobj:
+    if mo.get('class') in list_class:
+        pass
+    else:
+        list_class.append(mo.get('class'))
+print(len(list_class))
+print(list_class)
