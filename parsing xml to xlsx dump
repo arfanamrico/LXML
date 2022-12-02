@@ -1,0 +1,61 @@
+from lxml import etree
+import pandas as pd 
+
+dirpath = r"E:\Dokument\DUMP\XML 2022118"
+filenama = "2G.xml"
+root = etree.parse(f'{dirpath}/{filenama}').getroot()
+list_class = []
+status = root.get('type') #untuk mendapatkan nilai actual
+print(status)
+#parsing date time
+tanggal = root.findall('header')
+for tgl in tanggal:
+    for chil in tgl:
+        tangal = chil.get('dateTime').split('T') #untuk mendapatkan datetime
+        tahun, bulan, hari = tangal[0].split('-')
+        jam = tangal[1].split('.')[0]
+        tangga = f'{bulan}/{hari}/{tahun} {jam}'
+print(tangga)
+#untuk mendapatkan nama2 class
+manangeobj = root.findall('managedObject')
+for mo in manangeobj:
+    if mo.get('class') in list_class:
+        pass
+    else:
+        list_class.append(mo.get('class'))
+print(len(list_class))
+#print(list_class)
+jml = len(list_class)
+c = 1
+def proses ():
+    global c
+    for mo in manangeobj:
+        if mo.get('class') == isi:    
+            dname = {}
+#            dname.update({'status':status})
+#            dname.update({'last_modified':tanggal})
+            nama = mo.get('class')
+            word = mo.get('distName').split('/')
+            for z in word:
+                col = z.split('-')
+                dname.update({f'{col[0]}Id':col[1]})      
+            dname.update({'version':mo.get('version')}) 
+            for i in mo :  
+                dname.update({i.get('name'):i.text})
+                for l in i:
+                    dname.update({i.get('name'):l.text})
+            kelas.append(dname)
+    df = pd.DataFrame(kelas)
+    df['status'] = status
+    df['last_modified'] = tangga
+    df.drop(columns=['PLMNId'],inplace=True)
+    namafile = f'A_{nama}.xlsx'
+    df.to_excel(f'{dirpath}/{namafile}', index=False)
+    print(f'File {namafile} created! {c}/{jml} files')
+    c += 1
+
+for isi in list_class:
+    kelas = []
+    proses()
+
+print(f'file create completed!')
