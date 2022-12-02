@@ -1,0 +1,9 @@
+from lxml import etree
+filenya = "country_data.xml"
+root = etree.parse(filenya).getroot()
+coords_list = []
+for coord in root:
+    print(coord.get('name'), coord.get('Id'))
+    print(coord.attrib)
+    for ele in coord:
+        print(ele.tag, ele.text)
