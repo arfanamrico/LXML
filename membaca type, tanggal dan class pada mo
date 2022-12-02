@@ -1,0 +1,22 @@
+from lxml import etree
+filenya = "3G.xml"
+root = etree.parse(filenya).getroot()
+list_class = []
+status = root.get('type') #untuk mendapatkan nilai actual
+print(status)
+tanggal = root.findall('header')
+for tgl in tanggal:
+    for chil in tgl:
+        tangal = chil.get('dateTime').split('T') #untuk mendapatkan datetime
+        tahun, bulan, hari = tangal[0].split('-')
+        jam = tangal[1].split('.')[0]
+        tangga = f'{bulan}/{hari}/{tahun} {jam}'
+print(tangga)
+manangeobj = root.findall('managedObject')
+for mo in manangeobj:
+    if mo.get('class') in list_class:
+        pass
+    else:
+        list_class.append(mo.get('class'))
+print(len(list_class))
+print(list_class)
